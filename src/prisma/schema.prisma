@@ -172,7 +172,7 @@ model Medicine {
   tradeName           String
   scientificName      String
   pharmaceuticalForm  String?
-  AdministrationRoute String?
+  administrationRoute String?
   size                Decimal?
   sizeUnit            String?  @db.VarChar(8)
   packageTypes        String?
@@ -190,13 +190,13 @@ model Medicine {
 
 model Manufacturer {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique(sort: Desc)
   country   String?
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 
   // Relation fields
   medicines Medicine[]
-
+  @@index([name])
   @@map("manufacturers")
 }

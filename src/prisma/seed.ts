@@ -1,23 +1,24 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import { PatientProps, userCreateProps, MedicineCreate } from '../@types'
 import {
-  DoctorProps,
-  PatientProps,
-  AttendantProps,
-  userCreateProps,
-} from '../@types';
-import { specialities, healthPlans, labs } from '../util';
+  specialities,
+  healthPlans,
+  labs,
+  manufacturers,
+  medicines
+} from '../util'
 
 // Instantiate Prisma Client
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 const randomSpeciality = (): string => {
-  return specialities[Math.floor(Math.random() * specialities.length)];
-};
+  return specialities[Math.floor(Math.random() * specialities.length)]
+}
 
 const randomHealthPlan = (): string => {
-  return healthPlans[Math.floor(Math.random() * healthPlans.length)];
-};
+  return healthPlans[Math.floor(Math.random() * healthPlans.length)]
+}
 
 const randomTimePeriod = (): string[] => {
   const timePeriods: string[][] = [
@@ -27,11 +28,11 @@ const randomTimePeriod = (): string[] => {
     ['morning', 'evening'],
     ['morning'],
     ['afternoon'],
-    ['evening'],
-  ];
-  const randomIndex: number = Math.floor(Math.random() * 7);
-  return timePeriods[randomIndex];
-};
+    ['evening']
+  ]
+  const randomIndex: number = Math.floor(Math.random() * 7)
+  return timePeriods[randomIndex]
+}
 
 const weekDays: string[] = [
   '0monday',
@@ -39,42 +40,42 @@ const weekDays: string[] = [
   '2wednesday',
   '3thursday',
   '4friday',
-  '5saturday',
-];
+  '5saturday'
+]
 
 const randomShiftValues = () => {
-  const shiftValues: Set<string> = new Set();
-  const random: number = Math.floor(Math.random() * 6 + 1);
+  const shiftValues: Set<string> = new Set()
+  const random: number = Math.floor(Math.random() * 6 + 1)
   for (let i = 1; i <= random; i++) {
-    shiftValues.add(weekDays[Math.floor(Math.random() * 6)]);
+    shiftValues.add(weekDays[Math.floor(Math.random() * 6)])
   }
   return Array.from(shiftValues)
     .sort()
-    .map((day) => day.slice(1));
-};
+    .map((day) => day.slice(1))
+}
 
 const randomShift = () => {
   return {
     timePeriod: randomTimePeriod(),
-    weekDays: randomShiftValues(),
-  };
-};
+    weekDays: randomShiftValues()
+  }
+}
 
 const randomPhones = () => {
-  const random: number = Math.floor(Math.random() * 3);
-  const phones: string[] = [];
+  const random: number = Math.floor(Math.random() * 3)
+  const phones: string[] = []
   for (let i = 0; i < random; i++) {
-    phones.push(faker.phone.number('(##)#####-####'));
+    phones.push(faker.phone.number('(##)#####-####'))
   }
-  return phones;
-};
+  return phones
+}
 
 const createUser = (type: string) => {
   let user: any = {
     name: faker.name.findName(),
     email: faker.internet.email().toLocaleLowerCase(),
-    phones: randomPhones(),
-  };
+    phones: randomPhones()
+  }
 
   switch (type) {
     case 'doctor':
@@ -88,169 +89,218 @@ const createUser = (type: string) => {
             shift: randomShift(),
             specialities: {
               connect: {
-                name: randomSpeciality(),
+                name: randomSpeciality()
               }
-            },
+            }
           }
-        },
-      };
-      break;
+        }
+      }
+      break
     case 'attendant':
       user = {
         ...user,
         password: faker.internet.password(8),
         phones: randomPhones(),
         isAdmin: faker.datatype.boolean(),
-        role: 'attendant',
-      };
-      break;
+        role: 'attendant'
+      }
+      break
     case 'patient':
       user = {
         ...user,
         healthPlan: {
           connect: {
-            name: randomHealthPlan(),
-          },
-        },
-      };
-      break;
-    }
-  return user;
-};
+            name: randomHealthPlan()
+          }
+        }
+      }
+      break
+  }
+  return user
+}
 
 const clearDB = async () => {
   try {
-    await prisma.appointment.deleteMany({});
-    await prisma.doctorDetails.deleteMany({});
-    await prisma.examRequest.deleteMany({});
-    await prisma.exam.deleteMany({});
-    await prisma.healthPlan.deleteMany({});
-    await prisma.lab.deleteMany({});
-    await prisma.manufacturer.deleteMany({});
-    await prisma.medicine.deleteMany({});
-    await prisma.patient.deleteMany({});
-    await prisma.prescription.deleteMany({});
-    await prisma.user.deleteMany({});
-    await prisma.speciality.deleteMany({});
+    await prisma.appointment.deleteMany({})
+    await prisma.doctorDetails.deleteMany({})
+    await prisma.examRequest.deleteMany({})
+    await prisma.exam.deleteMany({})
+    await prisma.healthPlan.deleteMany({})
+    await prisma.lab.deleteMany({})
+    await prisma.manufacturer.deleteMany({})
+    await prisma.medicine.deleteMany({})
+    await prisma.patient.deleteMany({})
+    await prisma.prescription.deleteMany({})
+    await prisma.user.deleteMany({})
+    await prisma.speciality.deleteMany({})
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-};
+}
 
 interface manyUsersProps {
-  type: string;
-  total: number;
+  type: string
+  total: number
 }
 const manyUsers = (props: manyUsersProps) => {
-  const { type, total } = props;
-  const users: ( PatientProps | userCreateProps | any)[] = [];
+  const { type, total } = props
+  const users: (PatientProps | userCreateProps | any)[] = []
   for (let i = 0; i < total; i++) {
     process.stdout.write('.')
-    users.push(createUser(type));
+    users.push(createUser(type))
   }
-  return users;
-};
+  return users
+}
 
 const createManyUsers = async (props: manyUsersProps) => {
-  const { type } = props;
-  const response: any[] = [];
-  const users = manyUsers(props);
+  const { type } = props
+  const response: any[] = []
+  const users = manyUsers(props)
   for await (const user of users) {
     switch (type) {
       case 'attendant':
         process.stdout.write('.')
-        response.push(await prisma.user.create({ data: user }));
-        break;
+        response.push(await prisma.user.create({ data: user }))
+        break
       case 'doctor':
         process.stdout.write('.')
-        response.push(await prisma.user.create({
-          data: user,
-          include: {
-            doctorDetails: {
-              include: {
-                specialities: true
+        response.push(
+          await prisma.user.create({
+            data: user,
+            include: {
+              doctorDetails: {
+                include: {
+                  specialities: true
+                }
               }
-            },
-          },
-        }));
-        break;
+            }
+          })
+        )
+        break
       case 'patient':
         process.stdout.write('.')
-        response.push(await prisma.patient.create({
-          data: user,
-          include: {  healthPlan: true },
-        }));
-        break;
+        response.push(
+          await prisma.patient.create({
+            data: user,
+            include: { healthPlan: true }
+          })
+        )
+        break
     }
-  };
-  return response;
+  }
+  return response
 }
 
 const createSpecialities = async () => {
-  console.log('Start creating specialities...');
+  console.log('Start creating specialities...')
   const theSpecialities = await prisma.speciality.createMany({
-    data: specialities.sort().map(speciality => ({
+    data: specialities.sort().map((speciality) => ({
       name: speciality,
-      description: faker.lorem.sentence(),
-    })),
-  });
-  console.log(`Created ${theSpecialities.count} specialities.`);
+      description: faker.lorem.sentence()
+    }))
+  })
+  console.log(`Created ${theSpecialities.count} specialities.`)
 }
 
 const createHealthPlans = async () => {
-  console.log('Start creating healthPlans...');
+  console.log('Start creating healthPlans...')
   const theHealthPlans = await prisma.healthPlan.createMany({
-    data: healthPlans.sort().map(healthPlan => ({
+    data: healthPlans.sort().map((healthPlan) => ({
       name: healthPlan,
-      description: faker.lorem.sentence(),
-    })),
-  });
-  console.log(`Created ${theHealthPlans.count} healthPlans.`);
+      description: faker.lorem.sentence()
+    }))
+  })
+  console.log(`Created ${theHealthPlans.count} healthPlans.`)
 }
 
 const createLabs = async () => {
-  console.log('Start creating laboratories...');
+  console.log('Start creating laboratories...')
   const theLabs = await prisma.lab.createMany({
-    data: labs.sort().map(lab => ({
+    data: labs.map((lab) => ({
       name: lab.name,
       email: lab.email,
       phones: lab.phones,
       address: lab.address,
-      website: lab.website,
-    })),
-  });
-  console.log(`Created ${theLabs.count} laboratories.`);
+      website: lab.website
+    }))
+  })
+  console.log(`Created ${theLabs.count} laboratories.`)
+}
+
+const createManufacturers = async () => {
+  console.log('Start creating manufacturers...')
+  const theManufacturers = await prisma.manufacturer.createMany({
+    data: manufacturers.map((manufacturer) => ({
+      name: manufacturer.name,
+      country: manufacturer?.country
+    }))
+  })
+  console.log(`Created ${theManufacturers.count} manufacturers.`)
+}
+
+const createMedicines = async () => {
+  const medicineList: MedicineCreate[] = medicines.map((medicine) => ({
+    tradeName: medicine.tradeName,
+    scientificName: medicine.scientificName,
+    pharmaceuticalForm: medicine?.pharmaceuticalForm,
+    administrationRoute: medicine?.administrationRoute,
+    size: medicine?.size,
+    sizeUnit: medicine?.sizeUnit,
+    packageTypes: medicine?.packageTypes,
+    packageSize: medicine?.packageSize,
+    manufacturer: {
+      connect: {
+        name: medicine.name
+      }
+    }
+  }))
+
+  console.log('Start creating medicines...')
+  for await (const medicine of medicineList) {
+    process.stdout.write('.')
+    const theMedicine = await prisma.medicine.create({
+      data: medicine,
+      include: {
+        manufacturer: true
+      }
+    })
+    // console.log(theMedicine)
+  }
+  console.log(`\nCreated ${medicineList.length} medicines.`)
 }
 
 async function main() {
-  console.log('Start seeding the database...\nHold on.\nThis process may take several minutes.')
+  console.log(
+    'Start seeding the database...\nHold on.\nThis process may take several minutes.'
+  )
 
-  // await clearDB();
+  await clearDB()
 
-  await createSpecialities();
-  await createHealthPlans();
-  await createLabs();
+  await createSpecialities()
+  await createHealthPlans()
+  await createLabs()
+  await createManufacturers()
+  await createMedicines()
 
+  let totalUsers: number = 0
 
-  let totalUsers: number = 0;
+  console.log('Start creating random doctors...')
+  totalUsers = Math.floor(Math.random() * 20 + 1)
+  const doctors = await createManyUsers({ type: 'doctor', total: totalUsers })
+  // console.log(doctors);
+  console.log(`\n-> ${doctors.length} doctors created.`)
 
-  // console.log('Start creating random doctors...');
-  // totalUsers = Math.floor(Math.random() * 20 + 1);
-  // const doctors = await createManyUsers({type: 'doctor', total: totalUsers});
-  // // console.log(doctors);
-  // console.log(`\n-> ${doctors.length} doctors created.`);
+  console.log('Start creating random attendants...')
+  totalUsers = Math.floor(Math.random() * 5 + 1)
+  const attendants = await createManyUsers({ type: 'attendant', total: 50 })
+  // console.log(attendants);
+  console.log(`\n-> ${attendants.length} attendants created.`)
 
-  // console.log('Start creating random attendants...');
-  // totalUsers = Math.floor(Math.random() * 5 + 1);
-  // const attendants = await createManyUsers({type: 'attendant', total: 50});
-  // // console.log(attendants);
-  // console.log(`\n-> ${attendants.length} attendants created.`);
-
-  // console.log('Start creating random patients...');
-  // totalUsers = Math.floor(Math.random() * 50 + 1);
-  // const patients = await createManyUsers({type: 'patient', total: totalUsers});
-  // // console.log(patients);
-  // console.log(`\n-> ${patients.length} patients created.`);
+  console.log('Start creating random patients...')
+  totalUsers = Math.floor(Math.random() * 50 + 1)
+  const patients = await createManyUsers({ type: 'patient', total: totalUsers })
+  // console.log(patients);
+  console.log(`\n-> ${patients.length} patients created.`)
 }
 
 main()
