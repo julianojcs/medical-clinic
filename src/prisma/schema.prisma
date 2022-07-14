@@ -1,0 +1,202 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(uuid())
+  name     String   @db.VarChar(256)
+  email    String   @unique(sort: Desc) @db.VarChar(128)
+  password String   @db.VarChar(16)
+  phones   String[] @default([])
+  role     String   @db.VarChar(16) @default("attendant")
+  isAdmin  Boolean  @default(false)
+  isActive Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation fields
+  doctorDetails         DoctorDetails?
+  prescriptions         Prescription[]
+  doctorAppointments    Appointment[]  @relation(name: "doctorAppointments")
+  attendantAppointments Appointment[]  @relation(name: "attendantAppointments")
+  doctorExamRequest     ExamRequest[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model DoctorDetails {
+  id          String   @id @unique
+  shift       Json     @default("{ \"timePeriod\": [\"morning\", \"afternoon\"], \"weekDays\": [\"monday\", \"tuesday\", \"wednesday\", \"thursday\", \"friday\" ] }")
+  updatedAt   DateTime @updatedAt
+
+  // Relation fields
+  specialities  speciality[]
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+  // userId     String   @unique @db.VarChar(36)
+  // user       User     @relation(name: "doctorDetails", fields: [userId], , references: [id], onDelete: Cascade)
+  @@map("doctorDetails")
+}
+
+model speciality {
+  id   String @id @default(uuid())
+  name String @unique(sort: Desc)
+  description String?
+
+  // Relation fields
+  doctor  DoctorDetails[]
+
+  @@map("specialities")
+}
+
+model Patient {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(256)
+  email     String   @unique(sort: Desc) @db.VarChar(128)
+  phones    String[] @default([])
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation fields
+  prescriptions Prescription[]
+  appointments  Appointment[]
+  examRequest   ExamRequest[]
+  healthPlanId  String         @db.VarChar(36)
+  healthPlan    HealthPlan     @relation(fields: [healthPlanId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@map("patients")
+}
+
+model HealthPlan {
+  id          String   @id @default(uuid())
+  name        String   @unique(sort: Desc)
+  description String?  @db.VarChar(256)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation fields
+  patients Patient[]
+
+  @@map("healthPlans")
+}
+
+model ExamRequest {
+  id                String    @id @default(uuid())
+  result            String?
+  receivedByPatient DateTime?
+  requestDate       DateTime  @default(now())
+  resultDate        DateTime?
+  createdAt         DateTime  @default(now())
+
+  // Relation fields
+  patientId String  @db.VarChar(36)
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId  String  @db.VarChar(36)
+  doctor    User    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  examId    String  @db.VarChar(36)
+  exam      Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  LabId     String  @db.VarChar(36)
+  lab       Lab     @relation(fields: [LabId], references: [id], onDelete: Cascade)
+
+  @@map("examRequests")
+}
+
+model Lab {
+
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(128)
+  address   String?
+  email     String?  @db.VarChar(128)
+  phones    String[] @default([])
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation fields
+  examsRequest ExamRequest[]
+
+  @@map("labs")
+}
+
+model Exam {
+  id          String        @id @default(uuid())
+  name        String        @db.VarChar(128)
+  examRequest ExamRequest[]
+
+  @@map("exams")
+}
+
+model Appointment {
+  id         String    @id @default(uuid())
+  date       DateTime
+  createdAt  DateTime  @default(now())
+  canceledAt DateTime?
+
+  // Relation fields
+  patientId   String  @db.VarChar(36)
+  patient     Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId    String  @db.VarChar(36)
+  doctor      User    @relation(name: "doctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
+  attendantId String  @db.VarChar(36)
+  attendant   User    @relation(name: "attendantAppointments", fields: [attendantId], references: [id], onDelete: Cascade)
+  @@map("appointments")
+}
+
+model Prescription {
+  id        String   @id @default(uuid())
+  desription String?
+  createdAt DateTime @default(now())
+
+  // Relation fields
+  medicines Medicine[]
+  patientId String     @db.VarChar(36)
+  pattient  Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId  String     @db.VarChar(36)
+  doctor    User       @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  @@map("prescriptions")
+}
+
+model Medicine {
+  id                  String   @id @default(uuid())
+  tradeName           String
+  scientificName      String
+  pharmaceuticalForm  String?
+  AdministrationRoute String?
+  size                Decimal?
+  sizeUnit            String?  @db.VarChar(8)
+  packageTypes        String?
+  packageSize         Int?
+  createdAt           DateTime @default(now())
+  isActive            Boolean  @default(true)
+
+  // Relation fields
+  prescriptions  Prescription[]
+  manufacturerId String         @db.VarChar(36)
+  manufacturer   Manufacturer   @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
+
+  @@map("medicines")
+}
+
+model Manufacturer {
+  id        String   @id @default(uuid())
+  name      String
+  country   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  // Relation fields
+  medicines Medicine[]
+
+  @@map("manufacturers")
+}

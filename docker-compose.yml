@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  # In Docker
+  # - TEST_POSTGRES_URI=postgres://root:test@postgres/test
+  # Outside Docker
+  # - TEST_POSTGRES_URI=postgres://root:test@localhost:5432/test
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+    ports:
+      - '5432:5432'
+    volumes:
+      # - gitlab-postgresql-volume:/var/lib/postgresql:Z
+      # - //c/Users/<user>/.docker/volumes/postgres/web-dev-simplified/db:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
+volumes:
+  postgres:
+
+# https://github.com/prisma/prisma/blob/main/docker/docker-compose.yml

@@ -1,0 +1,254 @@
+{
+  "RECORDS": [
+    {
+      "id": "b81515dd-d1f4-4cd5-86fe-b9ce43e26c6f",
+      "name": "ABBOTT PRODUCTS GMBH",
+      "country": "Germany"
+    },
+    {
+      "id": "7ad0c703-69e4-4452-8e21-020923a5523c",
+      "name": "ACINO PHARMA AG",
+      "country": "Switzerland"
+    },
+    {
+      "id": "0e4e21a9-113d-40aa-912b-92ddbfdf9b62",
+      "name": "ACTAVIS",
+      "country": "Malta"
+    },
+    {
+      "id": "506a9f3c-7eea-48a8-9426-52e479a8e627",
+      "name": "ALLERGAN PHARMACEUTICALS LTD",
+      "country": "Ireland"
+    },
+    {
+      "id": "ee84df6b-10f5-4ce8-89e2-7c5b7ace3290",
+      "name": "Amman Pharmaceutical Industries (API)",
+      "country": "Jordan"
+    },
+    {
+      "id": "f8196993-3d6e-4672-b420-705fdaa0f34b",
+      "name": "ANIKA THERAPEUTICS",
+      "country": "United States"
+    },
+    {
+      "id": "c595b11d-1fef-4291-a865-c649918e959f",
+      "name": "Aspen Pharma Pty Ltd",
+      "country": "Australia"
+    },
+    {
+      "id": "f6387a8c-1c18-48a9-af7a-373691f10090",
+      "name": "BOEHRINGER INGELHEIM",
+      "country": "Germany"
+    },
+    {
+      "id": "198362f8-f6ba-4529-a6c9-1a092663c89b",
+      "name": "BRISTOL-MYERS SQUIBB HOLDINGS PHARMA, Ltd. LIABBILITY COMPANY",
+      "country": "United States"
+    },
+    {
+      "id": "f8bbe7dd-2dc0-4694-8844-0ec09008d052",
+      "name": "EIPICO",
+      "country": "Egypt"
+    },
+    {
+      "id": "d54ef4d8-e3ea-44bb-a98e-11cf09260cc0",
+      "name": "FARMACLAIR",
+      "country": "France"
+    },
+    {
+      "id": "6a27cd57-c317-40dd-bd02-dd445aae9a06",
+      "name": "GLAXOSMITHKLINE (GSK)",
+      "country": "Germany"
+    },
+    {
+      "id": "d512ce19-0664-4448-a710-9dce62a62bfa",
+      "name": "GLAXOSMITHKLINE DUNGARVAN LIMITED",
+      "country": "Ireland"
+    },
+    {
+      "id": "88198b41-eb33-41b1-9176-e8496f39f217",
+      "name": "Haupt Pharma Wulfing GmbH",
+      "country": "Germany"
+    },
+    {
+      "id": "74bc04fe-200c-4223-a2f7-954f6e29d155",
+      "name": "I.C.N.PHARMACEUTICALS",
+      "country": "United States"
+    },
+    {
+      "id": "02340e92-9f2e-4fde-9f6e-59bd8c846f82",
+      "name": "JAMJOOM PHARMACEUTICALS COMPANY",
+      "country": "Saudi Arabia"
+    },
+    {
+      "id": "65852280-f210-454a-bbb7-dcedd00beb42",
+      "name": "JANSSEN PHARMACEUTICA N.V.",
+      "country": "Belgium"
+    },
+    {
+      "id": "0414e188-713c-4d2c-9ff5-2d3609b09054",
+      "name": "Jazeera Pharmaceutical Industries (JPI)",
+      "country": "Saudi Arabia"
+    },
+    {
+      "id": "6b15147e-8f21-4b22-aa0b-59d8c063d465",
+      "name": "JORDAN RIVER PHARMACEUTICAL INDUSTRIES",
+      "country": "Jordan"
+    },
+    {
+      "id": "6e57db8c-7e8e-464a-beda-060d7d6840fd",
+      "name": "Jordan Sweden Medical and Sterilization Co.",
+      "country": "Jordan"
+    },
+    {
+      "id": "ed95da2e-8138-456d-ad5b-e97b3d245acb",
+      "name": "JUBILANT HOLLISTERSTIER GENERAL PARTNERSHIP",
+      "country": "Canada"
+    },
+    {
+      "id": "2fb2ea52-3d65-4145-afbc-4031a6f5a605",
+      "name": "KUWAIT SAUDI PHARMACEUTICAL INDUSTRIES",
+      "country": "Kuwait"
+    },
+    {
+      "id": "19b7fefd-7a47-44ce-a0ad-fd47604b93b1",
+      "name": "LIEBEL  FLARSHEIM  COMPANY  LLC",
+      "country": "United States"
+    },
+    {
+      "id": "00b89eb7-43c0-4476-b1b7-916d2821ea9b",
+      "name": "MEDAC",
+      "country": "Germany"
+    },
+    {
+      "id": "8f58b6c0-c5b8-46f1-ae36-f7035859f629",
+      "name": "MEDICAL UNION PHARMACEUTICALS CO",
+      "country": "Egypt"
+    },
+    {
+      "id": "437417a9-c13f-4fed-afa1-e5d5bb6b42f9",
+      "name": "MERCKLE",
+      "country": "Germany"
+    },
+    {
+      "id": "c8dffe9f-6625-4981-8f09-25bda90cc495",
+      "name": "NATIONAL PHARMACEUTICAL INDUSTRIES CO",
+      "country": "Oman"
+    },
+    {
+      "id": "8c83d99d-5509-4c6c-9eb0-e637b268e4e4",
+      "name": "NEOPHARMA",
+      "country": "United Arab Emirates"
+    },
+    {
+      "id": "516ecacf-5c84-4d62-b14f-158377e287ff",
+      "name": "NOVARTIS",
+      "country": "Switzerland"
+    },
+    {
+      "id": "18d97852-3cc7-499c-8552-fe772ff46859",
+      "name": "NOVO NORDISK",
+      "country": "Denmark"
+    },
+    {
+      "id": "f0b80aaa-edf4-471f-8991-529b69c66050",
+      "name": "OCTAPHARMA",
+      "country": "Austria"
+    },
+    {
+      "id": "ec89d9fa-88b4-4c8e-883e-d44c04981474",
+      "name": "OMAN PHARMACEUTICAL PRODUCTS",
+      "country": "Oman"
+    },
+    {
+      "id": "1fcd24bb-d9ee-4047-85aa-eb1fa46fd06c",
+      "name": "PFIZER",
+      "country": "Canada"
+    },
+    {
+      "id": "a43cf8b8-cc8f-4632-8e3e-57bcc7924afd",
+      "name": "Pharma International Co.",
+      "country": "Jordan"
+    },
+    {
+      "id": "e0bc08a5-3e5a-48fa-a365-19cc42e1d972",
+      "name": "Pharmaceutical Solution Industries (PSI)",
+      "country": "Saudi Arabia"
+    },
+    {
+      "id": "fd75621c-35a9-4f56-94d0-80661be82e2e",
+      "name": "PHARMATHEN INTERNATIONAL",
+      "country": "Greece"
+    },
+    {
+      "id": "c1c49847-0a21-411f-b4e6-1ed3ac9d9422",
+      "name": "PHILADELPHIA PHARMACEUTICAL",
+      "country": "Jordan"
+    },
+    {
+      "id": "81ae6ce6-8542-41f3-82f7-1a72b52e6aa8",
+      "name": "Ram Pharmaceutical Industries",
+      "country": "Jordan"
+    },
+    {
+      "id": "ff2e620e-98a9-49bf-b712-69b1a36a0300",
+      "name": "RIYADH PHARMA",
+      "country": "Saudi Arabia"
+    },
+    {
+      "id": "31b5c54b-46ae-4a24-a372-66f1d1e6c9f6",
+      "name": "SAJA-SAUDI ARABIAN JAPANESE PHARMACEUTICAL CO",
+      "country": "Saudi Arabia"
+    },
+    {
+      "id": "ce452928-7da0-4598-ae74-41ecb32daf43",
+      "name": "SANDOZ",
+      "country": "Austria"
+    },
+    {
+      "id": "43f819bb-f8bc-426a-9db8-c12e8b27c935",
+      "name": "SANOFI WINTHROP INDUSTRIE",
+      "country": "France"
+    },
+    {
+      "id": "8845e1c6-11b7-4f68-aeb2-0bef2136c1b4",
+      "name": "sanofi-aventis",
+      "country": "United Kingdom"
+    },
+    {
+      "id": "5d8d4940-a74c-4574-a97e-6549ba328089",
+      "name": "SERONO",
+      "country": "Italy"
+    },
+    {
+      "id": "37dd95cb-8cd3-4d09-9b00-483a465e0e37",
+      "name": "Siegfried Barbera, S.L",
+      "country": "Spain"
+    },
+    {
+      "id": "ba0a247e-6f22-465f-82cb-4c643ef0c64f",
+      "name": "SMIITHKLINE BEECHAM",
+      "country": "United Kingdom"
+    },
+    {
+      "id": "fe0cba71-e32b-4d87-bc70-23904bf5984b",
+      "name": "Sofarimex SA",
+      "country": "Portugal"
+    },
+    {
+      "id": "8661f495-555e-4a51-85a2-cb75b5563729",
+      "name": "TABUK PHARMACEUTICAL MANUFACTURING CO.",
+      "country": "Saudi Arabia"
+    },
+    {
+      "id": "8f2ae391-3068-423e-b9de-1a8ed40f9371",
+      "name": "TAKEDA GMBH",
+      "country": "Germany"
+    },
+    {
+      "id": "3fd03161-88db-455c-9180-39027938d545",
+      "name": "The Jordanian Pharmaceutical Manufacturing Medical Equipment Co. Ltd. (JPM)",
+      "country": "Jordan"
+    }
+  ]
+}
