@@ -28,7 +28,7 @@ model User {
   prescriptions         Prescription[]
   doctorAppointments    Appointment[]  @relation(name: "doctorAppointments")
   attendantAppointments Appointment[]  @relation(name: "attendantAppointments")
-  doctorExamRequest     ExamRequest[]
+  doctorTestRequest     TestRequest[]
 
   @@index([email])
   @@map("users")
@@ -70,7 +70,7 @@ model Patient {
   // Relation fields
   prescriptions Prescription[]
   appointments  Appointment[]
-  examRequest   ExamRequest[]
+  testRequest   TestRequest[]
   healthPlanId  String         @db.VarChar(36)
   healthPlan    HealthPlan     @relation(fields: [healthPlanId], references: [id], onDelete: Cascade)
 
@@ -91,7 +91,7 @@ model HealthPlan {
   @@map("healthPlans")
 }
 
-model ExamRequest {
+model TestRequest {
   id                String    @id @default(uuid())
   result            String?
   receivedByPatient DateTime?
@@ -104,12 +104,12 @@ model ExamRequest {
   patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
   doctorId  String  @db.VarChar(36)
   doctor    User    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
-  examId    String  @db.VarChar(36)
-  exam      Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  testId    String  @db.VarChar(36)
+  test      Test    @relation(fields: [testId], references: [id], onDelete: Cascade)
   LabId     String  @db.VarChar(36)
   lab       Lab     @relation(fields: [LabId], references: [id], onDelete: Cascade)
 
-  @@map("examRequests")
+  @@map("testRequests")
 }
 
 model Lab {
@@ -124,17 +124,17 @@ model Lab {
   updatedAt DateTime @updatedAt
 
   // Relation fields
-  examsRequest ExamRequest[]
+  testsRequest TestRequest[]
 
   @@map("labs")
 }
 
-model Exam {
+model Test {
   id          String        @id @default(uuid())
   name        String        @db.VarChar(128)
-  examRequest ExamRequest[]
+  testRequest TestRequest[]
 
-  @@map("exams")
+  @@map("tests")
 }
 
 model Appointment {
@@ -185,6 +185,7 @@ model Medicine {
   manufacturerId String         @db.VarChar(36)
   manufacturer   Manufacturer   @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
 
+  @@unique([tradeName, packageTypes, packageSize], name: "medicineIdentifier")
   @@map("medicines")
 }
 

@@ -95,7 +95,7 @@ export interface MedicineProps {
   packageSize?: number
 }
 
-export interface MedicineCreate extends MedicineProps {
+export interface MedicineManufacturerCreateProps extends MedicineProps {
   manufacturer: {
     connect: {
       name: string
@@ -103,11 +103,47 @@ export interface MedicineCreate extends MedicineProps {
   }
 }
 
+export interface MedicineManufacturerProps
+  extends MedicineProps,
+    ManufacturerProps {}
+
 // Interface to import medicineList from json list
-export interface ImportMedicineList extends MedicineProps {
+export interface MedicineListProps extends MedicineProps {
   name: string
 }
 export interface ManufacturerProps {
   name: string
   country?: string
+}
+
+export interface SpecialityProps {
+  name: string
+  description?: string
+}
+
+export interface TestProps {
+  name: string
+}
+
+export interface PrescriptionsProps {
+  description: string
+  patient: {
+    connect: {
+      name: string
+    }
+  }
+  doctor: {
+    connect: {
+      name: string
+    }
+  }
+  medicines: {
+    connect: [
+      {
+        tradeName: string
+        packageTypes: string
+        packageSize: string
+      }
+    ]
+  }
 }
