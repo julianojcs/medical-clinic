@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi'
 import boom from '@hapi/boom'
-import Joi from 'Joi'
+import Joi from 'joi'
 import { UserProps } from '../@types'
 
 const attendantsPlugin: Hapi.Plugin<undefined> = {
