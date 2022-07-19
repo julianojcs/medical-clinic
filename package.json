@@ -8,13 +8,24 @@
     "schema": "src/prisma/schema.prisma"
   },
   "scripts": {
+    "build": "prisma generate && tsc",
+    "start": "node dist/index.js",
+    "compile": "tsc",
     "dev": "ts-node src/index.ts",
-    "test": "jest",
-    "teste": "ts-node ./src/prisma/teste.ts",
     "seed": "prisma db seed",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "postgres:start": "docker-compose up -d",
+    "db:push": "prisma db push",
+    "migrate:reset": "prisma migrate reset",
+    "migrate:create": "prisma migrate dev --create-only",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "prisma:generate": "prisma generate",
+    "migrate": "npx prisma migrate dev --name init --preview-feature",
     "seed-tests": "ts-node ./src/tests.ts",
     "dev-seed": "ts-node ./src/prisma/seed.ts",
-    "migrate": "npx prisma migrate dev --name init --preview-feature"
+    "teste": "ts-node ./src/prisma/teste.ts"
   },
   "keywords": [],
   "author": "",
