@@ -1,7 +1,42 @@
 import Hapi from '@hapi/hapi'
 import boom from '@hapi/boom'
 import Joi from 'joi'
-import { UserProps } from '../@types'
+import { AttendantProps, UserProps } from '../@types'
+
+const attendantInputValidator = Joi.object({
+  name: Joi.string().alter({
+    create: (schema) => schema.required(),
+    update: (schema) => schema.optional()
+  }),
+  email: Joi.string()
+    .email()
+    .alter({
+      create: (schema) => schema.lowercase().required(),
+      update: (schema) => schema.lowercase().optional()
+    }),
+  phones: Joi.array()
+    .items(Joi.string().default([]))
+    .alter({
+      create: (schema) => schema.required(),
+      update: (schema) => schema.optional()
+    })
+    .optional(),
+  password: Joi.string()
+    .pattern(/^[a-zA-Z0-9]{6,16}$/)
+    .alter({
+      create: (schema) => schema.required(),
+      update: (schema) => schema.optional()
+    }),
+  role: Joi.string()
+    .valid('attendant')
+    .alter({
+      create: (schema) => schema.required(),
+      update: (schema) => schema.optional()
+    })
+})
+
+const createAttendantValidator = attendantInputValidator.tailor('create')
+const updateAttendantValidator = attendantInputValidator.tailor('update')
 
 const attendantsPlugin: Hapi.Plugin<undefined> = {
   name: 'app/attendants',
@@ -14,7 +49,7 @@ const attendantsPlugin: Hapi.Plugin<undefined> = {
         handler: createAttendantHandler,
         options: {
           validate: {
-            payload: attendantInputValidator,
+            payload: createAttendantValidator,
             failAction: (request, h, err) => {
               throw err
             }
@@ -75,20 +110,26 @@ const attendantsPlugin: Hapi.Plugin<undefined> = {
             }
           }
         }
+      },
+      {
+        method: 'PUT',
+        path: '/attendants/{id}',
+        handler: updateAttendantHandler,
+        options: {
+          validate: {
+            params: Joi.object({
+              id: Joi.string().guid({ version: 'uuidv4' })
+            }),
+            payload: updateAttendantValidator,
+            failAction: (request, h, err) => {
+              throw err
+            }
+          }
+        }
       }
     ])
   }
 }
-
-const attendantInputValidator = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required().lowercase(),
-  phones: Joi.array().items(Joi.string()).required().default([]),
-  password: Joi.string()
-    .pattern(/^[a-zA-Z0-9]{6,16}$/)
-    .required(),
-  role: Joi.string().valid('attendant').required()
-})
 
 const createAttendantHandler: any = async (
   request: Hapi.Request,
@@ -172,4 +213,26 @@ const getAttendantsHandler: any = async (
     return boom.badImplementation('failed to get attendants')
   }
 }
+async function updateAttendantHandler(
+  request: Hapi.Request,
+  h: Hapi.ResponseToolkit
+) {
+  const { prisma } = request.server.app
+  const attendantId = request.params.id
+  const payload = request.payload as Partial<AttendantProps>
+
+  try {
+    const updatedAttendant = await prisma.user.update({
+      where: {
+        id: attendantId
+      },
+      data: payload
+    })
+    return h.response(updatedAttendant).code(200)
+  } catch (err: any) {
+    request.log('error', err)
+    return boom.badImplementation('failed to update attendant')
+  }
+}
+
 export default attendantsPlugin
