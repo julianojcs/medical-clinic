@@ -4,5 +4,8 @@ node_modules
 old
 src/domain
 src/domain/**.*
+src/tests/**.*
 src/prisma/migrations
 package-lock.json
+coverage
+

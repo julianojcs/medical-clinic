@@ -16,38 +16,77 @@ export interface DoctorDetailProps {
   ]
 }
 
-export interface DoctorCreateProps {
-  name: string
-  email: string
-  password: string
-  phones?: string[]
-  isAdmin?: boolean
-  role?: string
-  doctorDetails?: {
-    create: {
-      shift: Shift | any
-      specialities: {
-        connect: {
-          name: string
-        }
-      }
-    }
-  }
-}
-
 export interface DoctorDetailCreateProps {
   doctorDetails?: {
     create: {
-      shift: Shift | any
-      speciality: {
-        connect: {
-          name: string
-        }
+      shift: Shift
+      specialities: {
+        connect: { name: string }[]
       }
     }
   }
 }
 
-export interface DoctorProps extends UserProps, DoctorDetailProps {}
+export interface DoctorCreateProps extends UserProps {
+  doctorDetails?: {
+    create: {
+      shift: Shift
+      specialities: {
+        connect: { name: string }[]
+      }
+    }
+  }
+}
+// const teste: DoctorCreateProps = {
+//   name: '',
+//   email: '',
+//   password: '',
+//   role: '',
+//   doctorDetails: {
+//     create: {
+//       shift: {
+//         timePeriod: ['afternoon'],
+//         weekDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+//       },
+//       specialities: {
+//         connect: [
+//           { name: 'spec1' },
+//           { name: 'spec2' },
+//           { name: 'spec3' },
+//         ]
+//       }
+//     }
+//   }
+// }
+// console.log(teste)
 
-export interface UserDoctorDetailProps extends UserProps, HealthPlanProps {}
+export interface DoctorProps extends UserProps {
+  doctorDetails: {
+    shift: Shift
+    specialities: [
+      {
+        name: string
+        description: string
+      }
+    ]
+  }
+}
+// const teste: DoctorProps = {
+//   name: '',
+//   email: '',
+//   password: '',
+//   role: '',
+//   doctorDetails: {
+//     shift: {
+//       timePeriod: [],
+//       weekDays: []
+//     },
+//     specialities: [
+//       {
+//         name: '',
+//         description: ''
+//       }
+//     ]
+//   }
+// }
+// console.log(teste)

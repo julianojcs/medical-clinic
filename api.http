@@ -1,0 +1,39 @@
+GET http://localhost:3000/
+
+###
+GET http://localhost:3000/patients
+
+###
+GET http://localhost:3000/attendants
+
+###
+POST http://localhost:3000/attendants
+Content-Type: application/json
+
+{
+  "name": "Juliano Costa Silva",
+  "email": "apfjuliano@gmail.com",
+  "password": "12345678",
+  "phones": ["0987654321"],
+  "role": "attendant"
+}
+
+###
+POST http://localhost:3000/attendants
+Content-Type: application/json
+
+{
+  "name": "juliano costa",
+  "email": "juliano@gmail.com",
+  "phone": "27981330708"
+}
+
+###
+POST http://localhost:3000/patient
+Content-Type: application/json
+
+{
+  "name": "ryani antonio",
+  "email": "ryani@gmail.com",
+  "phone": "(27)99994-6541"
+}

@@ -155,13 +155,13 @@ model Appointment {
 
 model Prescription {
   id        String   @id @default(uuid())
-  desription String?
+  description String?
   createdAt DateTime @default(now())
 
   // Relation fields
   medicines Medicine[]
   patientId String     @db.VarChar(36)
-  pattient  Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patient  Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
   doctorId  String     @db.VarChar(36)
   doctor    User       @relation(fields: [doctorId], references: [id], onDelete: Cascade)
   @@map("prescriptions")

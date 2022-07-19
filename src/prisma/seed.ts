@@ -8,7 +8,9 @@ import {
   TestProps,
   MedicineListProps,
   MedicineManufacturerProps,
-  PatientHealthPlanProps
+  PatientHealthPlanProps,
+  DoctorProps,
+  PrescriptionProps
 } from '../@types'
 import {
   specialities,
@@ -18,19 +20,19 @@ import {
   manufacturers,
   medicines
 } from '../util'
+import {
+  randomSpeciality,
+  randomHealthPlan,
+  randomTimePeriod,
+  randomShiftValues,
+  randomShift,
+  randomPhones
+} from './seed-util'
 
 // Instantiate Prisma Client
 const prisma = new PrismaClient()
 
-const randomSpeciality = (): string => {
-  return specialities[Math.floor(Math.random() * specialities.length)]
-}
-
-const randomTest = (): string => {
-  return tests[Math.floor(Math.random() * tests.length)]
-}
-
-const randomMedicines = async (): Promise<any | null> => {
+const randomMedicine = async (): Promise<any | null> => {
   let result: MedicineManufacturerProps | null = null
 
   const randomMedicine: MedicineListProps =
@@ -53,60 +55,6 @@ const randomMedicines = async (): Promise<any | null> => {
   } finally {
     return result
   }
-}
-
-const randomHealthPlan = (): string => {
-  return healthPlans[Math.floor(Math.random() * healthPlans.length)]
-}
-
-const randomTimePeriod = (): string[] => {
-  const timePeriods: string[][] = [
-    ['morning', 'afternoon', 'evening'],
-    ['morning', 'afternoon'],
-    ['afternoon', 'evening'],
-    ['morning', 'evening'],
-    ['morning'],
-    ['afternoon'],
-    ['evening']
-  ]
-  const randomIndex: number = Math.floor(Math.random() * 7)
-  return timePeriods[randomIndex]
-}
-
-const weekDays: string[] = [
-  '0monday',
-  '1tuesday',
-  '2wednesday',
-  '3thursday',
-  '4friday',
-  '5saturday'
-]
-
-const randomShiftValues = () => {
-  const shiftValues: Set<string> = new Set()
-  const random: number = Math.floor(Math.random() * 6 + 1)
-  for (let i = 1; i <= random; i++) {
-    shiftValues.add(weekDays[Math.floor(Math.random() * 6)])
-  }
-  return Array.from(shiftValues)
-    .sort()
-    .map((day) => day.slice(1))
-}
-
-const randomShift = () => {
-  return {
-    timePeriod: randomTimePeriod(),
-    weekDays: randomShiftValues()
-  }
-}
-
-const randomPhones = () => {
-  const random: number = Math.floor(Math.random() * 3)
-  const phones: string[] = []
-  for (let i = 0; i < random; i++) {
-    phones.push(faker.phone.number('(##)#####-####'))
-  }
-  return phones
 }
 
 const createUser = (type: string) => {
@@ -156,25 +104,6 @@ const createUser = (type: string) => {
       break
   }
   return user
-}
-
-const clearDB = async (): Promise<void> => {
-  try {
-    await prisma.appointment.deleteMany({})
-    await prisma.doctorDetails.deleteMany({})
-    await prisma.testRequest.deleteMany({})
-    await prisma.test.deleteMany({})
-    await prisma.healthPlan.deleteMany({})
-    await prisma.lab.deleteMany({})
-    await prisma.manufacturer.deleteMany({})
-    await prisma.medicine.deleteMany({})
-    await prisma.patient.deleteMany({})
-    await prisma.prescription.deleteMany({})
-    await prisma.user.deleteMany({})
-    await prisma.speciality.deleteMany({})
-  } catch (error) {
-    console.error(error)
-  }
 }
 
 interface manyUsersProps {
@@ -319,45 +248,13 @@ const createMedicines = async () => {
   console.log(`\nCreated ${medicineList.length} medicines.`)
 }
 
-const createPrescriptions = async () => {
-  const medicineList: MedicineManufacturerCreateProps[] = medicines.map(
-    (medicine) => ({
-      tradeName: medicine.tradeName,
-      scientificName: medicine.scientificName,
-      pharmaceuticalForm: medicine?.pharmaceuticalForm,
-      administrationRoute: medicine?.administrationRoute,
-      size: medicine?.size,
-      sizeUnit: medicine?.sizeUnit,
-      packageTypes: medicine?.packageTypes,
-      packageSize: medicine?.packageSize,
-      manufacturer: {
-        connect: {
-          name: medicine.name
-        }
-      }
-    })
-  )
-
-  console.log('Start creating medicines...')
-  for await (const medicine of medicineList) {
-    process.stdout.write('.')
-    const theMedicine = await prisma.medicine.create({
-      data: medicine,
-      include: {
-        manufacturer: true
-      }
-    })
-  }
-  console.log(`\nCreated ${medicineList.length} medicines.`)
-}
-
-const createPatient0 = async () => {
+const createPatient = async (name: string, email: string): Promise<void> => {
   try {
-    console.log('Start creating patient 0...')
+    console.log(`\nCreating patient ${name}`)
     const patient: any = await prisma.patient.create({
       data: {
-        name: 'Juliano Costa Silva',
-        email: 'apfjuliano@gmail.com',
+        name: name,
+        email: email.toLocaleLowerCase(),
         phones: ['27981330708'],
         healthPlan: {
           connect: {
@@ -366,20 +263,19 @@ const createPatient0 = async () => {
         }
       }
     })
-    console.log(`Created patient: ${patient.name}.`)
   } catch (error: any) {
-    console.log('Patient already exists.')
+    console.log('\nPatient already exists.\n')
   }
 }
 
-const getPatient0 = async (): Promise<any | null> => {
+const getPatient = async (email: string): Promise<any | null> => {
   let result: PatientHealthPlanProps | null = null
 
   try {
     const patient: any | null = await prisma.patient.findFirst({
       where: {
         isActive: true,
-        email: 'apfjuliano@gmail.com'
+        email: email.toLocaleLowerCase()
       },
       include: {
         healthPlan: true
@@ -393,13 +289,13 @@ const getPatient0 = async (): Promise<any | null> => {
   }
 }
 
-const createDoctor0 = async () => {
+const createDoctor = async (name: string, email: string): Promise<void> => {
   try {
-    console.log('Start creating doctor 0...')
+    console.log(`\nCreating doctor ${name}\n`)
     const doctor: any = await prisma.user.create({
       data: {
-        name: 'Geraldo de Souza',
-        email: 'souza.geraldo@medicina.ufmg.br',
+        name: name,
+        email: email.toLocaleLowerCase(),
         phones: ['31958730754'],
         password: '123456',
         isAdmin: true,
@@ -408,34 +304,52 @@ const createDoctor0 = async () => {
           create: {
             shift: randomShift(),
             specialities: {
-              connect: {
-                name: randomSpeciality()
-              }
+              connect: [
+                {
+                  name: randomSpeciality()
+                },
+                {
+                  name: randomSpeciality()
+                },
+                {
+                  name: randomSpeciality()
+                }
+              ]
             }
+          }
+        }
+      },
+      include: {
+        doctorDetails: {
+          include: {
+            specialities: true
           }
         }
       }
     })
-    console.log(`Created doctor: ${doctor.name}.`)
   } catch (error: any) {
-    console.log('Doctor already exists.')
+    console.log('\nDoctor already exists.\n')
   }
 }
 
-const getDoctor0 = async (): Promise<any | null> => {
-  let result: PatientHealthPlanProps | null = null
+const getDoctor = async (email: string): Promise<any | null> => {
+  let result: DoctorProps | null = null
 
   try {
-    const patient: any | null = await prisma.patient.findFirst({
+    const doctor: any | null = await prisma.user.findFirst({
       where: {
         isActive: true,
-        email: 'apfjuliano@gmail.com'
+        email: email.toLocaleLowerCase()
       },
       include: {
-        healthPlan: true
+        doctorDetails: {
+          include: {
+            specialities: true
+          }
+        }
       }
     })
-    result = patient
+    result = doctor
   } catch (error: any) {
     console.error(error.message)
   } finally {
@@ -443,22 +357,90 @@ const getDoctor0 = async (): Promise<any | null> => {
   }
 }
 
+interface CreatePrescriptionProps {
+  description: string
+  patient: PatientHealthPlanProps
+  doctor: any
+  medicines: any[]
+}
+
+const createPrescription = async (
+  props: CreatePrescriptionProps
+): Promise<PrescriptionProps | null> => {
+  const { description, patient, doctor, medicines } = props
+  let result: PrescriptionProps | null = null
+  try {
+    const prescription: any = await prisma.prescription.create({
+      data: {
+        description: description,
+        patient: {
+          connect: { email: patient.email }
+        },
+        doctor: {
+          connect: { email: doctor.email }
+        },
+        medicines: {
+          connect: medicines.map((medicine) => ({
+            id: medicine.id
+          }))
+        }
+      },
+      include: {
+        patient: {
+          include: {
+            healthPlan: true
+          }
+        },
+        doctor: {
+          include: {
+            doctorDetails: {
+              include: {
+                specialities: true
+              }
+            }
+          }
+        },
+        medicines: {
+          include: {
+            manufacturer: true
+          }
+        }
+      }
+    })
+    result = prescription
+  } catch (error: any) {
+    console.error(error.message)
+  } finally {
+    return result
+  }
+}
+
+const clearDB = async (): Promise<void> => {
+  try {
+    await prisma.user.deleteMany({})
+    await prisma.patient.deleteMany({})
+    await prisma.doctorDetails.deleteMany({})
+    await prisma.speciality.deleteMany({})
+    await prisma.healthPlan.deleteMany({})
+    await prisma.test.deleteMany({})
+    await prisma.lab.deleteMany({})
+    await prisma.medicine.deleteMany({})
+    await prisma.manufacturer.deleteMany({})
+    await prisma.testRequest.deleteMany({})
+    await prisma.prescription.deleteMany({})
+    await prisma.appointment.deleteMany({})
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 async function main() {
+  await clearDB()
   const logs = false
 
   console.log(
     'Start seeding the database...\nHold on.\nThis process may take some minutes.'
   )
-
-  await createPatient0()
-  console.log(await getPatient0())
-
-  return
-  console.log(`randomTest: ${randomTest()}`)
-  console.log(
-    `randomMedicines: ${JSON.stringify(await randomMedicines(), null, 2)}`
-  )
-  await clearDB()
 
   await createTests()
   await createSpecialities()
@@ -466,6 +448,8 @@ async function main() {
   await createLabs()
   await createManufacturers()
   await createMedicines()
+
+  console.log('\nStart creating users...\n')
 
   let totalUsers: number = 0
 
@@ -489,6 +473,32 @@ async function main() {
   const patients = await createManyUsers({ type: 'patient', total: totalUsers })
   logs && console.log(patients)
   console.log(`\n-> ${patients.length} patients created.`)
+
+  await createPatient('Juliano Costa Silva', 'apfjuliano@gmail.com')
+  const juliano = await getPatient('apfjuliano@gmail.com')
+  logs && console.log(juliano)
+
+  await createDoctor('Geraldo de Souza', 'souza.geraldo@medicina.ufmg.br')
+  const geraldo = await getDoctor('souza.geraldo@medicina.ufmg.br')
+  logs && console.log(JSON.stringify(geraldo, null, 2))
+
+  const randMed: any[] = []
+  for (let i = 0; i < 2; i++) {
+    randMed.push(await randomMedicine())
+  }
+  logs && console.log(JSON.stringify(randMed, null, 2))
+
+  const prescription: PrescriptionProps | null = await createPrescription({
+    description: 'Prescription for patient',
+    patient: juliano,
+    doctor: geraldo,
+    medicines: randMed
+  })
+
+  logs &&
+    console.log(
+      `\nCreated prescription:\n ${JSON.stringify(prescription, null, 2)}`
+    )
 }
 
 main()

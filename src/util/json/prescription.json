@@ -1,0 +1,105 @@
+{
+  "id": "dc520219-20f0-48a1-ba77-3878ec8f9595",
+  "description": "Prescription for patient",
+  "createdAt": "2022-07-15T04:06:20.897Z",
+  "patientId": "271fb59d-220b-4c12-b309-658408e6c7b9",
+  "doctorId": "8c5f8762-d017-4722-9a2e-04de1b370327",
+  "patient": {
+    "id": "271fb59d-220b-4c12-b309-658408e6c7b9",
+    "name": "Juliano Costa Silva",
+    "email": "apfjuliano@gmail.com",
+    "phones": ["27981330708"],
+    "isActive": true,
+    "createdAt": "2022-07-15T04:06:20.761Z",
+    "updatedAt": "2022-07-15T04:06:20.762Z",
+    "healthPlanId": "238e5da0-28b0-44e6-a037-80f38ffb10dc",
+    "healthPlan": {
+      "id": "238e5da0-28b0-44e6-a037-80f38ffb10dc",
+      "name": "Health First",
+      "description": "Iste tempora omnis iste praesentium repudiandae culpa occaecati nostrum soluta.",
+      "createdAt": "2022-07-15T04:06:14.430Z",
+      "updatedAt": "2022-07-15T04:06:14.431Z"
+    }
+  },
+  "doctor": {
+    "id": "8c5f8762-d017-4722-9a2e-04de1b370327",
+    "name": "Geraldo de Souza",
+    "email": "souza.geraldo@medicina.ufmg.br",
+    "password": "123456",
+    "phones": ["31958730754"],
+    "role": "doctor",
+    "isAdmin": true,
+    "isActive": true,
+    "createdAt": "2022-07-15T04:06:20.811Z",
+    "updatedAt": "2022-07-15T04:06:20.812Z",
+    "doctorDetails": {
+      "id": "8c5f8762-d017-4722-9a2e-04de1b370327",
+      "shift": {
+        "weekDays": ["tuesday", "friday"],
+        "timePeriod": ["morning", "evening"]
+      },
+      "updatedAt": "2022-07-15T04:06:20.812Z",
+      "specialities": [
+        {
+          "id": "d129b682-0164-49c8-87f0-0c96af0307c4",
+          "name": "Nuclear medicine",
+          "description": "Hic laudantium vel cumque ut."
+        },
+        {
+          "id": "e2fe44ea-974c-45b0-a8be-ce6d4940adf8",
+          "name": "Obstetrics and gynecology",
+          "description": "Omnis ex veniam totam blanditiis."
+        },
+        {
+          "id": "8fae6d9c-80bd-45df-855e-60e098f0c45c",
+          "name": "Urology",
+          "description": "Voluptatum earum dolorem fugiat itaque aperiam cupiditate molestiae."
+        }
+      ]
+    }
+  },
+  "medicines": [
+    {
+      "id": "ab2d7e0a-ee7e-437f-94f6-db2eb1812e73",
+      "tradeName": "OLFEN-75",
+      "scientificName": "DICLOFENAC SODIUM, LIDOCAINE HYDROCHLORIDE",
+      "pharmaceuticalForm": "Solution",
+      "administrationRoute": "Parenteral",
+      "size": "2",
+      "sizeUnit": "ml",
+      "packageTypes": "Ampoule",
+      "packageSize": 5,
+      "createdAt": "2022-07-15T04:06:15.162Z",
+      "isActive": true,
+      "manufacturerId": "00f9336d-e835-4206-b672-4e730433dadb",
+      "manufacturer": {
+        "id": "00f9336d-e835-4206-b672-4e730433dadb",
+        "name": "Haupt Pharma Wulfing GmbH",
+        "country": "Germany",
+        "isActive": true,
+        "createdAt": "2022-07-15T04:06:14.503Z"
+      }
+    },
+    {
+      "id": "e9871ec5-3238-49b0-b15b-f8993bd348f5",
+      "tradeName": "ORELOX 100MG TABLETS",
+      "scientificName": "CEFPODOXIME",
+      "pharmaceuticalForm": "Tablet",
+      "administrationRoute": "Oral",
+      "size": "0",
+      "sizeUnit": "",
+      "packageTypes": "Blister",
+      "packageSize": 10,
+      "createdAt": "2022-07-15T04:06:16.616Z",
+      "isActive": true,
+      "manufacturerId": "33e9a8de-48d6-4f36-9e4f-ee8ce3cb5d25",
+      "manufacturer": {
+        "id": "33e9a8de-48d6-4f36-9e4f-ee8ce3cb5d25",
+        "name": "SANOFI WINTHROP INDUSTRIE",
+        "country": "France",
+        "isActive": true,
+        "createdAt": "2022-07-15T04:06:14.503Z"
+      }
+    }
+  ]
+}

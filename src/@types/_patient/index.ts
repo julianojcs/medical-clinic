@@ -1,9 +1,10 @@
-import { HealthPlanProps } from '..'
+import { HealthPlanProps } from '../'
 
 export interface PatientProps {
   name: string
   email: string
   phones?: string[]
+  healthPlan?: HealthPlanProps
 }
 
 export interface PatientCreateProps {
@@ -17,4 +18,27 @@ export interface PatientCreateProps {
   }
 }
 
-export interface PatientHealthPlanProps extends PatientProps, HealthPlanProps {}
+export interface PatientHealthPlanProps {
+  name: string
+  email: string
+  phones?: string[]
+  healthPlan: {
+    name: string
+    description?: string
+  }
+}
+export interface PatientHealthPlan {
+  id: string
+  name: string
+  email: string
+  phones: string[]
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
+  healthPlanId: string
+  healthPlan: {
+    healthPlanId: string
+    name: string
+    description?: string
+  }
+}
