@@ -1,13 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import {
-  PatientProps,
-  userCreateProps,
+  PatientCreateProps,
+  DoctorCreateProps,
   MedicineManufacturerCreateProps,
   SpecialityProps,
   TestProps,
   MedicineListProps,
-  MedicineManufacturerProps
+  MedicineManufacturerProps,
+  PatientHealthPlanProps
 } from '../@types'
 import {
   specialities,
@@ -30,7 +31,7 @@ const randomTest = (): string => {
 }
 
 const randomMedicines = async (): Promise<any | null> => {
-  let result: MedicineManufacturerCreateProps | null = null
+  let result: MedicineManufacturerProps | null = null
 
   const randomMedicine: MedicineListProps =
     medicines[Math.floor(Math.random() * medicines.length)]
@@ -182,7 +183,7 @@ interface manyUsersProps {
 }
 const manyUsers = (props: manyUsersProps) => {
   const { type, total } = props
-  const users: (PatientProps | userCreateProps | any)[] = []
+  const users: (PatientCreateProps | DoctorCreateProps | any)[] = []
   for (let i = 0; i < total; i++) {
     process.stdout.write('.')
     users.push(createUser(type))
@@ -350,6 +351,98 @@ const createPrescriptions = async () => {
   console.log(`\nCreated ${medicineList.length} medicines.`)
 }
 
+const createPatient0 = async () => {
+  try {
+    console.log('Start creating patient 0...')
+    const patient: any = await prisma.patient.create({
+      data: {
+        name: 'Juliano Costa Silva',
+        email: 'apfjuliano@gmail.com',
+        phones: ['27981330708'],
+        healthPlan: {
+          connect: {
+            name: randomHealthPlan()
+          }
+        }
+      }
+    })
+    console.log(`Created patient: ${patient.name}.`)
+  } catch (error: any) {
+    console.log('Patient already exists.')
+  }
+}
+
+const getPatient0 = async (): Promise<any | null> => {
+  let result: PatientHealthPlanProps | null = null
+
+  try {
+    const patient: any | null = await prisma.patient.findFirst({
+      where: {
+        isActive: true,
+        email: 'apfjuliano@gmail.com'
+      },
+      include: {
+        healthPlan: true
+      }
+    })
+    result = patient
+  } catch (error: any) {
+    console.error(error.message)
+  } finally {
+    return result
+  }
+}
+
+const createDoctor0 = async () => {
+  try {
+    console.log('Start creating doctor 0...')
+    const doctor: any = await prisma.user.create({
+      data: {
+        name: 'Geraldo de Souza',
+        email: 'souza.geraldo@medicina.ufmg.br',
+        phones: ['31958730754'],
+        password: '123456',
+        isAdmin: true,
+        role: 'doctor',
+        doctorDetails: {
+          create: {
+            shift: randomShift(),
+            specialities: {
+              connect: {
+                name: randomSpeciality()
+              }
+            }
+          }
+        }
+      }
+    })
+    console.log(`Created doctor: ${doctor.name}.`)
+  } catch (error: any) {
+    console.log('Doctor already exists.')
+  }
+}
+
+const getDoctor0 = async (): Promise<any | null> => {
+  let result: PatientHealthPlanProps | null = null
+
+  try {
+    const patient: any | null = await prisma.patient.findFirst({
+      where: {
+        isActive: true,
+        email: 'apfjuliano@gmail.com'
+      },
+      include: {
+        healthPlan: true
+      }
+    })
+    result = patient
+  } catch (error: any) {
+    console.error(error.message)
+  } finally {
+    return result
+  }
+}
+
 async function main() {
   const logs = false
 
@@ -357,6 +450,10 @@ async function main() {
     'Start seeding the database...\nHold on.\nThis process may take some minutes.'
   )
 
+  await createPatient0()
+  console.log(await getPatient0())
+
+  return
   console.log(`randomTest: ${randomTest()}`)
   console.log(
     `randomMedicines: ${JSON.stringify(await randomMedicines(), null, 2)}`

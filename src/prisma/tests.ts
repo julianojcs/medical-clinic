@@ -2,35 +2,37 @@ import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import {
   DoctorProps,
-  PatientProps,
+  PatientCreateProps,
   AttendantProps,
-  userCreateProps,
-} from '../@types';
-import { specialities, healthPlans, labs } from '../util';
+  DoctorCreateProps
+} from '../@types'
+import { specialities, healthPlans, labs } from '../util'
 
 // Instantiate Prisma Client
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 const createSpecialities = async () => {
-  console.log('Start creating specialities...');
+  console.log('Start creating specialities...')
   const theSpecialities = await prisma.speciality.createMany({
-    data: specialities.sort().map(speciality => ({
+    data: specialities.sort().map((speciality) => ({
       name: speciality,
-      description: faker.lorem.sentence(),
-    })),
-  });
-  console.log(`Created ${theSpecialities.count} specialities.`);
+      description: faker.lorem.sentence()
+    }))
+  })
+  console.log(`Created ${theSpecialities.count} specialities.`)
 }
 
 async function main() {
-  console.log('Start seeding the database...\nHold on.\nThis process may take several minutes.')
+  console.log(
+    'Start seeding the database...\nHold on.\nThis process may take several minutes.'
+  )
 
   // await prisma.speciality.deleteMany({});
   // await prisma.user.deleteMany({});
   // await prisma.doctorDetails.deleteMany({});
   // await createSpecialities();
 
-  const data: userCreateProps = {
+  const data: DoctorCreateProps = {
     name: 'Juliano Costa',
     email: 'juliano@gmail.com',
     password: '123456',
@@ -40,8 +42,16 @@ async function main() {
     doctorDetails: {
       create: {
         shift: {
-          timePeriod: [ 'morning', 'afternoon'],
-          weekDays: [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+          timePeriod: ['morning', 'afternoon'],
+          weekDays: [
+            'monday',
+            'tuesday',
+            'wednesday',
+            'thursday',
+            'friday',
+            'saturday',
+            'sunday'
+          ]
         },
         specialities: {
           connect: {
@@ -49,7 +59,7 @@ async function main() {
           }
         }
       }
-    },
+    }
   }
 
   const doctor = await prisma.user.create({
@@ -59,10 +69,10 @@ async function main() {
         include: {
           specialities: true
         }
-      },
+      }
     }
-  });
-  console.log(doctor);
+  })
+  console.log(doctor)
 }
 
 
